@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Title</title>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
+    </head>
+    <body><script>
+function setup() {
+  createCanvas(400, 400);
+  background(200); // Fondo gris suave
+  
+  // Base de la casa (rectángulo grande)
+  fill(255, 204, 0); // Color de la pared (amarillo suave)
+  noStroke(); // Sin borde
+  rect(100, 200, 200, 150); // Rectángulo para la base de la casa
+  
+  // Puerta (rectángulo pequeño)
+  fill(139, 69, 19); // Color marrón para la puerta
+  rect(170, 270, 60, 80); // Ubicación y tamaño de la puerta
+
+  // Marco de la puerta (más oscuro)
+  stroke(101, 67, 33); // Color marrón oscuro
+  strokeWeight(5); // Grosor del marco
+  noFill(); // Sin color dentro del marco
+  rect(169, 269, 62, 82); // Marco de la puerta
+
+  // Manilla de la puerta (pequeño círculo)
+  fill(255, 215, 0); // Color dorado para la manilla
+  noStroke();
+  ellipse(200, 310, 10, 10); // Manilla en la puerta
+  
+  // Ventanas (dos rectángulos)
+  fill(173, 216, 230); // Color azul claro para las ventanas
+  noStroke(); // Sin borde
+  rect(120, 220, 40, 40); // Ventana izquierda
+  rect(240, 220, 40, 40); // Ventana derecha
+  
+  // Bordes de las ventanas (marrón)
+  stroke(101, 67, 33); // Color marrón para el borde
+  strokeWeight(4); // Grosor del borde
+  rect(120, 220, 40, 40); // Borde de la ventana izquierda
+  rect(240, 220, 40, 40); // Borde de la ventana derecha
+  
+  // Marcos interiores de las ventanas (líneas marrones)
+  stroke(101, 67, 33); // Color marrón
+  strokeWeight(3); // Grosor de las líneas
+  line(140, 220, 140, 260); // Línea vertical de la ventana izquierda
+  line(120, 240, 160, 240); // Línea horizontal de la ventana izquierda
+  line(260, 220, 260, 260); // Línea vertical de la ventana derecha
+  line(240, 240, 280, 240); // Línea horizontal de la ventana derecha
+  
+  // Tejado (triángulo)
+  fill(255, 0, 0); // Color rojo para el tejado
+  noStroke(); // Sin borde
+  triangle(100, 200, 300, 200, 200, 120); // Tejado (triángulo)
+}
+</script>
+    
+    </body>
+</html>
+
+
+
+
+
