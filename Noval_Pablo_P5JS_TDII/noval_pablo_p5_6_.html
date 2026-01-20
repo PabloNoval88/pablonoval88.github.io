@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Title</title>
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
+    </head>
+    <body>
+     <script>
+  // A1 — Reutilización: añade movimiento con variables (sin condicionales)
+
+  // Estado del objeto que se moverá (elige: coche, nube, sol…)
+  let x_s, y_s, v_s, d_s, r_s; // usa las que necesites
+  let x_l, y_l, v_l, d_l, r_l;
+  function setup() {
+    createCanvas(900, 500);
+
+    // 1) Tamaños relativos
+    d_s = min(width, height) * 0.16;
+    r_s = d_s / 2;
+    d_l = min(width, height) * 0.19;
+    r_l = d_l / 2;
+
+    // 2) Posición inicial relativa (evita números mágicos)
+    x_s = -r_s;              
+    y_s = height * 0.12;   
+    x_l = -r_l-width;              
+    y_l = height * 0.12;   
+    // 3) Velocidad relativa al ancho
+    v_s = width / 600;
+    v_l = width / 400;
+  }
+            
+function draw() {
+        createCanvas(400,400);
+        background(87,161,245);
+    
+        noFill();
+        stroke(255,0,0)
+        strokeWeight(22)
+        arc(200,390,390,390,PI,0)
+        
+        noFill();
+        stroke(254,153,0)
+        strokeWeight(22)
+        arc(200,410,360,390,PI,0)
+    
+         noFill();
+        stroke(255,255,100)
+        strokeWeight(22)
+        arc(200,430,330,390,PI,0)
+    
+        noFill();
+        stroke(111,246,58)
+        strokeWeight(22)
+        arc(200,450,300,390,PI,0)
+    
+        noFill();
+        stroke(55, 147, 254)
+        strokeWeight(22)
+        arc(200,470,270,390,PI,0)
+    
+         noFill();
+        stroke(15, 7, 241)
+        strokeWeight(22)
+        arc(200,490,240,390,PI,0)
+         
+         noFill();
+        stroke(200, 49, 251)
+        strokeWeight(22)
+        arc(200,510,210,390,PI,0)
+        
+        stroke(0,0,0);
+        strokeWeight(3);
+        fill(200);
+        rect(169, 109, 182, 382);
+    
+        
+        fill(0,0,0,100);
+        rect(239,329,51,73);
+        
+        fill(255,255,100)
+        ellipse(x_s,y_s,d_s);
+        x_s=x_s+v_s;
+        
+        fill(120)
+        ellipse(x_l,y_l,d_l)
+         x_l=x_l+v_l;
+       
+        fill(156,204,255);
+        rect(195,145,50,50);   
+         
+        fill(156,204,255);
+        rect(275,145,50,50);
+        
+        fill(156,204,255);
+        rect(195,225,50,50);   
+    
+         fill(156,204,255);
+        rect(275,225,50,50); 
+         
+        
+}
+        </script>
+    </body>
+</html>

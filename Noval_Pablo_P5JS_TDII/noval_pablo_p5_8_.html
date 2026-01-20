@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Title</title>
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
+    </head>
+    <body>
+        <script>
+            
+  let x_s, y_s, r_s;
+  let x_me, y_me, v_me, d_me, r_me, D_me, R_me, theta_me, omega_me;
+  let x_v, y_v, v_v, d_v, r_v, D_v, R_v, theta_v, omega_v;
+  let x_t, y_t, v_t, d_t, r_t, D_t, R_t, theta_t, omega_t;
+  let x_ma, y_ma, v_ma, d_ma, r_ma, D_ma, R_ma, theta_ma, omega_ma;
+  let x_j, y_j, v_j, d_j, r_j, D_j, R_j, theta_j, omega_j;
+  let x_sa, y_sa, v_sa, d_sa, r_sa, D_sa, R_sa, theta_sa, omega_sa;
+  let x_n, y_n, v_n, d_n, r_n, D_n, R_n, theta_n, omega_n;
+  let x_u, y_u, v_u, d_u, r_u, D_u, R_u, theta_u, omega_u;
+  let centerX, centerY, sunsize;
+
+  function setup() {
+    createCanvas(700, 1400);
+
+    // Tamaños relativos
+    sunsize = min(width, height) * 0.15;
+    r_s = sunsize/2
+   
+    D_me = sunsize * 1.4;
+    R_me = D_me / 2;
+    d_me = sunsize * 0.1;
+    r_me = d_me / 2;
+   
+    D_v = sunsize * 1.8;
+    R_v = D_v / 2;
+    d_v = sunsize * 0.15;
+    r_v = d_v / 2;
+   //Tierra
+    D_t = sunsize * 2.5;
+    R_t = D_t / 2;
+    d_t = sunsize * 0.18;
+    r_t = d_t / 2;
+   
+    D_ma = sunsize * 3.2;
+    R_ma = D_ma / 2;
+    d_ma = sunsize * 0.12;
+    r_ma = d_ma / 2;
+   
+    D_j = sunsize * 4.0;
+    R_j = D_j / 2;
+    d_j = sunsize * 0.30;
+    r_j = d_j / 2;
+   
+    D_sa = sunsize * 4.7;
+    R_sa = D_sa / 2;
+    d_sa = sunsize * 0.25;
+    r_sa = d_sa / 2;
+   
+    D_u = sunsize * 5.2;
+    R_u = D_u / 2;
+    d_u = sunsize * 0.20;
+    r_u = d_u / 2;
+   
+    D_n = sunsize * 5.8;
+    R_n = D_n / 2;
+    d_n = sunsize * 0.22;
+    r_n = d_n / 2;
+   
+
+   // Ángulos iniciales
+    theta_me = 0;
+    theta_v = Math.PI / 36;
+    theta_t = 0;
+    theta_ma = -11 * Math.PI / 72;
+    theta_j = Math.PI / 2;
+    theta_sa = -Math.PI / 2;
+    theta_u = 4 * Math.PI / 3;
+    theta_n = Math.PI;
+  
+
+    // velocidades angulares
+   omega_me = 0.05;
+    omega_v = 0.045;
+    omega_t = 0.04;
+    omega_ma = 0.035;
+    omega_j = 0.03;
+    omega_sa = 0.025;
+    omega_u = 0.02;
+    omega_n = 0.01;
+
+
+    // Posición inicial relativa (evita números mágicos)
+    centerX = width / 2;
+    centerY = height / 2;
+   
+    x_s = centerX;  // Sol
+    y_s = centerY;
+   
+   
+
+  }
+
+  function draw() {
+       // Posiciones de los planetas  
+  x_me =  x_s + cos(theta_me) * R_me;  // Mercurio
+  y_me =  y_s + sin(theta_me) * R_me;
+   
+  x_v = x_s + cos(theta_v) * R_v;  // Venus
+  y_v = y_s + sin(theta_v) * R_v;
+   
+  x_t = x_s + cos(theta_t) * R_t;  // Tierra
+  y_t = y_s + sin(theta_t) * R_t;
+   
+  x_ma = x_s  + cos(theta_ma) * R_ma;  // Marte
+  y_ma = y_s + sin(theta_ma) * R_ma;
+   
+  x_j = x_s  + cos(theta_j) * R_j;  // Júpiter
+  y_j = y_s + sin(theta_j) * R_j;
+   
+  x_sa = x_s  + cos(theta_sa) * R_sa;  // Saturno
+  y_sa = y_s + sin(theta_sa) * R_sa;
+   
+  x_u = x_s  + cos(theta_u) * R_u;  // Urano
+  y_u = centerY + sin(theta_u) * R_u;
+   
+  x_n = x_s  + cos(theta_n) * R_n;  // Neptuno
+  y_n = y_s + sin(theta_n) * R_n;
+   
+    background(0, 0, 25);  // Cielo oscuro
+
+    // Sol
+    fill(255, 204, 0);
+    noStroke();
+    ellipse(x_s, y_s, sunsize);
+   
+    // Mercurio
+    noFill();
+    stroke(100);
+    circle(centerX, centerY, D_me);
+    fill(142, 142, 147);
+    noStroke();
+    ellipse(x_me, y_me, d_me);
+   
+    // Venus
+    noFill();
+    stroke(100);
+    circle(centerX, centerY, D_v);
+    fill(255, 204, 102);
+    noStroke();
+    ellipse(x_v, y_v, d_v);
+   
+    // Tierra
+    noFill();
+    stroke(100);
+    circle(centerX, centerY, D_t);
+    fill(0, 0, 255);
+    noStroke();
+    ellipse(x_t, y_t, d_t);
+   
+   
+    // Marte
+    noFill();
+    stroke(100);
+    circle(centerX, centerY, D_ma);
+    fill(255, 69, 0);
+    noStroke();
+    ellipse(x_ma, y_ma, d_ma);
+   
+    // Júpiter
+    noFill();
+    stroke(100);
+    circle(centerX, centerY, D_j);
+    fill(210, 105, 30);
+    noStroke();
+    ellipse(x_j, y_j, d_j);
+   
+    //Saturno
+    noFill();
+    stroke(100);
+    circle(centerX, centerY, D_sa);
+    fill(216, 211, 216);
+    noStroke();
+    ellipse(x_sa, y_sa, d_sa);
+   
+    //Urano
+    noFill();
+    stroke(100);
+    circle(centerX, centerY, D_u);
+    fill(150, 208, 220);
+    noStroke();
+    ellipse(x_u, y_u, d_u);
+   
+   //Neptuno
+    noFill();
+    stroke(100);
+    circle(centerX, centerY, D_n);
+   fill(0, 105, 148);
+   noStroke();
+   ellipse(x_n,y_n,d_n);
+ 
+  //Movimiento (variables)  
+ 
+  theta_me = theta_me + omega_me;
+   
+  theta_v = theta_v + omega_v;
+   
+  theta_t = theta_t + omega_t;
+   
+  theta_ma = theta_ma + omega_ma;
+   
+  theta_j = theta_j + omega_j;
+   
+  theta_sa = theta_sa + omega_sa;
+   
+  theta_u = theta_u + omega_u;
+   
+  theta_n = theta_n + omega_n;
+   
+
+        
+        
+    }
+        </script>
+    </body>
+</html>

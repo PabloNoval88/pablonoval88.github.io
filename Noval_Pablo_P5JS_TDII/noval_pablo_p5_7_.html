@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Title</title>
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
+    </head>
+    <body>
+     <script>
+  // A1 — Reutilización: añade movimiento con variables (sin condicionales)
+
+  // Estado del objeto que se moverá (elige: coche, nube, sol…)
+  let x_s, y_s, v_s, d_s, r_s; // usa las que necesites
+  let x_l, y_l, v_l, d_l, r_l;
+  let x_cl;
+  let x_cs;
+  let adelanto_cl
+  let adelanto_cs;
+  let H, L, wheelD, xC, yC, vxC;
+  let troncoW, troncoH, copaD, S;
+  let xG,yG,vyG,Sg,cuerda,dG,rG;
+  
+  function setup() {
+    createCanvas(400, 400);
+
+    // 1) Tamaños relativos
+    d_s = min(width, height) * 0.19;
+    r_s = d_s / 2;
+    d_l = min(width, height) * 0.14;
+    r_l = d_l / 2;
+    Sg = 0.08*height;
+    cuerda = 1.2*Sg;
+    dG = width*0.07;
+    rG= dG/2
+ 
+    
+    // adelantos
+    adelanto_cl = width * 0,1
+    
+    // 2) Posición inicial relativa (evita números mágicos)
+    x_s = -r_s;              
+    y_s = height * 0.12;   
+    x_l = -r_l-width;              
+    y_l = height * 0.12;
+    x_cl = - 2.8*width + adelanto_cl;
+    L = 0.12*height;
+    H = 0.4*L; 
+    wheelD = 0.25*L;
+    xC = -1.5*width;
+    yC = 0.95* height;
+    S = 0.1*height
+    troncoW = 0.3*S;
+    troncoH = 1.9*S;
+    copaD = 1.9*S
+    xG = width*0.50;
+    yG = height+50;
+    
+    // 3) Velocidad relativa al ancho
+    v_s = width / 1000;
+    v_l = width / 600;
+    vxC = width /600;
+    vyG = height /1600;
+   
+    
+  }
+            
+function draw() {
+        
+        background(87,161,245);
+    
+       //arco iris
+        noFill();
+        stroke(255,0,0)
+        strokeWeight(22)
+        arc(200,390,390,390,PI,0)
+        
+        noFill();
+        stroke(254,153,0)
+        strokeWeight(22)
+        arc(200,410,360,390,PI,0)
+    
+        noFill();
+        stroke(255,255,100)
+        strokeWeight(22)
+        arc(200,430,330,390,PI,0)
+    
+        noFill();
+        stroke(111,246,58)
+        strokeWeight(22)
+        arc(200,450,300,390,PI,0)
+    
+        noFill();
+        stroke(55, 147, 254)
+        strokeWeight(22)
+        arc(200,470,270,390,PI,0)
+    
+        noFill();
+        stroke(15, 7, 241)
+        strokeWeight(22)
+        arc(200,490,240,390,PI,0)
+     
+        noFill();
+        stroke(20, 49, 251);
+        strokeWeight(22);
+        arc(200,510,210,390,PI,0);
+        
+    
+        //sol
+        fill(255,255,100);
+        noStroke()
+        ellipse(x_s,y_s,d_s);
+        x_s=x_s+v_s;
+ 
+        //cielo de noche
+        fill(0,14,71)
+        noStroke()
+        rect(x_cl,0, 2*width ,height);
+        
+        
+        //luna
+        noStroke();
+        fill(192,192,200)
+        circle(x_l,y_l,d_l)
+        
+    
+    
+        //edificio
+        stroke(0,0,0);
+        strokeWeight(3);
+        fill(200);
+        rect(169, 109, 182, 382);
+       
+        fill(156,204,255);
+        rect(195,145,50,50);   
+         
+        fill(156,204,255);
+        rect(275,145,50,50);
+        
+        fill(156,204,255);
+        rect(195,225,50,50);   
+    
+        fill(156,204,255);
+        rect(275,225,50,50); 
+    
+        fill(0,0,0,100);
+        rect(239,329,51,73);
+    
+        //árbol
+        fill(120, 80, 40);
+        rect(0.15*width - 0.5*troncoW, 1*height - troncoH, troncoW, troncoH); 
+        fill(40, 140, 60); 
+        circle(0.15*width, 1*height - troncoH - 0.3*S, copaD);
+        //coche
+        fill(240, 200, 0);
+        rect(xC - 0.5*L, 0.95*height - 0.85*H, L, H, 0.1*L);
+        fill(40); 
+        circle(xC - 0.35*L, 0.95*height + 0.55*H, wheelD);
+        circle(xC + 0.35*L, 0.95*height + 0.55*H, wheelD); 
+        
+        // Globo
+        fill(255, 80, 80); 
+        circle(xG, yG, Sg); 
+        stroke(60); 
+        line(xG, yG + 0.5*Sg, xG, yG + 0.5*Sg + cuerda);
+    
+        //variables
+        x_s=x_s+v_s;
+        x_l=x_l+v_l;
+        x_cl=x_cl+v_l;
+        xC = xC + vxC;
+        S = S + 0.00008*height;
+        yG = yG - vyG;
+       
+}
+        </script>
+    </body>
+</html>
