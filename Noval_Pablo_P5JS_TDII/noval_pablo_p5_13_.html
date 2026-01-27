@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>T10-dia y noche</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
+    </head>
+    <body>
+        <script>
+         // Variables
+        let xS, yS, dS, rS, vS; //sol
+        let xL, yL, dL, rL, vL;   // Luna
+        let dia, mes, año;
+        let xP, yP;        // posición del personaje
+        let S;             // tamaño base del stickman
+        let vP;            // velocidad horizontal (izq/der)
+        let groundY;       // altura del suelo (coincide con tu rectángulo de suelo en T12)
+        let vY;            // velocidad vertical del salto
+        let jumpV;         // impulso del salto (valor negativo para subir)
+        let g;             // gravedad (valor positivo para bajar)
+        let rHead
+        let bodyL 
+        let armL
+        let legL 
+        let hipY          
+        let shoulderY 
+        let headY 
+            
+            function setup() {
+            createCanvas(900, 500);
+            dS = 0.1 * width;    // diámetro del Sol (relativo al ancho)
+            rS = dS / 2;
+            yS = 0.2 * height;   // altura relativa
+            xS = -rS;            // arranca entrando por la izquierda
+            vS = width / 400;    // velocidad proporcional al ancho
+         
+            // Luna (mitad del Sol)
+            dL = dS * 0.8; 
+            rL = dL /0.5;
+            xL = -width - rL; 
+            yL = height / 3; // altura distinta para distinguirla 
+            vL = vS; // misma velocidad
+            
+            dia = 1;
+            mes = 1;
+            año = 2026;
+            
+            // Suelo (debe coincidir con el suelo que ya dibujas en T12)
+           groundY = 0.80 * height;
+
+            // Stickman: tamaño y posición inicial
+            S  = 0.12 * min(width, height);
+            xP = 0.25 * width;
+            yP = groundY;                 // 
+            rHead = 0.20 * S;
+            bodyL = 0.60 * S;
+            armL  = 0.45 * S;
+            legL  = 0.55 * S;
+            hipY = yP - legL;          // cadera por encima de los pies
+            shoulderY = hipY - bodyL;  // hombros por encima de la cadera
+            headY = shoulderY - rHead;
+
+            // Movimiento horizontal
+            vP = width / 150;
+
+            // Salto (valores sencillos)
+            vY = 0;
+            jumpV = -0.030 * height;      // impulso hacia arriba
+            g = 0.0016 * height;          // aceleración hacia abajo (pequeña)
+          }
+
+        function draw() {
+            if (xS <= width + rS) {
+            // Día mientras el borde izquierdo del Sol no ha salido por la derecha
+                background(130, 206, 300); //azul
+            } else {
+            // Noche cuando el Sol ya salió completamente por la derecha
+                background(0); //negro
+            }
+
+            // 3.2 Suelo (decoración)
+            noStroke();
+            fill(20, 120, 40);
+            rect(0, 0.8 * height, width, 0.2 * height);
+
+            // 3.3 Sol (si está fuera, no se verá)
+            noStroke()
+            fill(255, 210, 0);
+            circle(xS, yS, dS);
+            
+            //Luna
+            noStroke(); 
+            fill(200);
+            circle(xL, yL, dL)
+            //Calendario
+            noStroke();//sin trazo
+
+            if (xS <= width + rS) { 
+            fill(0);    } 
+            else { 
+            fill(255); } 
+            textSize(20);
+            text("Fecha: (" + dia + ") (" + mes + ") (" + año + ")", 10, 20);
+            
+            //Stickman
+            stroke(255,0,0);
+            strokeWeight(0.06 * S);
+            noFill();
+            // Cabeza
+            circle(xP, headY, 2 * rHead);
+            // Tronco
+            line(xP, shoulderY, xP, hipY);
+            // Brazos (una línea horizontal + dos líneas hacia abajo)
+            line(xP - 0.25*S, shoulderY, xP + 0.25*S, shoulderY);
+            line(xP - 0.25*S, shoulderY, xP - 0.25*S, shoulderY + armL);
+            line(xP + 0.25*S, shoulderY, xP + 0.25*S, shoulderY + armL);
+            // Piernas
+            line(xP, hipY, xP - 0.18*S, yP);
+            line(xP, hipY, xP + 0.18*S, yP);
+            
+            // 3.4 Movimiento constante
+            xS = xS + vS;
+            xL = xL + vL;
+
+               // 3.5 Reinicio por posición (noche suficientemente larga)
+                if (xS > 2 * width + rS) {
+                xS = -rS;
+                xL = -width - rL;
+
+                dia = dia + 1;
+                }
+                if (dia > 30) {
+                    dia = 1;
+                    mes = mes + 1;
+                }
+
+                if (mes > 12) {
+                    mes = 1;
+                    año = año + 1;
+                }
+                //movimiento stickman
+                if (keyIsDown(LEFT_ARROW)) {
+                xP = xP - vP;
+                } else if (keyIsDown(RIGHT_ARROW)) {
+                xP = xP + vP;
+                }
+
+                
+                //no se sale del lienzo
+                if (xP < 0) {
+                xP = 0;
+                }
+                if (xP > width) {
+                xP = width;
+                }
+             
+               vY += g;
+               yP += vY;
+              if (yP > groundY) {
+                yP = groundY;
+                vY = 0;
+                }
+                hipY = yP - legL;
+                shoulderY = hipY - bodyL;
+               headY = shoulderY - rHead;
+
+            
+             //Muestra de variables
+            textSize(14);
+            stroke(255, 0, 0);
+            fill(255);
+            text(xS, 10, 10);
+            text(xL, 10, 28);
+            }
+         
+            
+            function keyPressed() {
+           if (keyCode === UP_ARROW) {
+            // Solo saltamos si estamos en el suelo
+           if (yP === groundY) {
+            vY = jumpV;
+            }
+          }
+        }
+        
+        </script>
+    </body>
+</html>
