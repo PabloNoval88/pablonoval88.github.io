@@ -1,0 +1,366 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>T10-dia y noche</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
+    </head>
+    <body>
+        <script>
+         // Variables
+        let xS, yS, dS, rS, vS; //sol
+        let xL, yL, dL, rL, vL;   // Luna
+        let dia, mes, año;
+        let xP, yP;        // posición del personaje
+        let S;             // tamaño base del stickman
+        let vP;            // velocidad horizontal (izq/der)
+        let groundY;       // altura del suelo (coincide con tu rectángulo de suelo en T12)
+        let vY;            // velocidad vertical del salto
+        let jumpV;         // impulso del salto (valor negativo para subir)
+        let g;             // gravedad (valor positivo para bajar)
+        let rHead;
+        let bodyL; 
+        let armL;
+        let legL ;
+        let hipY;          
+        let shoulderY; 
+        let headY;
+        let xO, yO, wO, hO, vO;
+        let xD, yD, tD, vD;
+        let disparoActivo;
+        let velocidadObjetivo;
+        let puntos;
+        let xB, yB, wB, hB, vB;
+        let gameOver;
+        
+            function setup() {
+            createCanvas(900, 500);
+            dS = 0.1 * width;    // diámetro del Sol (relativo al ancho)
+            rS = dS / 2;
+            yS = 0.2 * height;   // altura relativa
+            xS = -rS;            // arranca entrando por la izquierda
+            vS = width / 400;    // velocidad proporcional al ancho
+         
+            // Luna (mitad del Sol)
+            dL = dS * 0.8; 
+            rL = dL /0.5;
+            xL = -width - rL; 
+            yL = height / 3; // altura distinta para distinguirla 
+            vL = vS; // misma velocidad
+            
+            dia = 1;
+            mes = 1;
+            año = 2026;
+            
+            // Suelo (debe coincidir con el suelo que ya dibujas en T12)
+           groundY = 0.80 * height;
+
+            // Stickman: tamaño y posición inicial
+            S  = 0.12 * min(width, height);
+            xP = 0.25 * width;
+            yP = groundY;                 // 
+            rHead = 0.20 * S;
+            bodyL = 0.60 * S;
+            armL  = 0.45 * S;
+            legL  = 0.55 * S;
+            hipY = yP - legL;          // cadera por encima de los pies
+            shoulderY = hipY - bodyL;  // hombros por encima de la cadera
+            headY = shoulderY - rHead;
+
+            // Movimiento horizontal
+            vP = width / 150;
+
+            // Salto (valores sencillos)
+            vY = 0;
+            jumpV = -0.030 * height;      // impulso hacia arriba
+            g = 0.0016 * height;          // aceleración hacia abajo (pequeña)
+           
+           wO = 50;
+           hO = 50;
+           yO = height * 0.25;
+           xO = -wO;  // Empieza fuera de la pantalla
+           vO = random(1, 3);  // Velocidad aleatoria
+            
+            //Disparo
+            tD = 0.02 * min(width, height);
+            vD = 0.03 * height;
+            disparoActivo = false;
+             
+            //Obstáculo
+            wB = 90;
+            hB = 30;
+            yB = groundY - hB;
+            xB = -wB;
+            vB = 4;
+                
+             xO = random(width);  // Nueva posición aleatoria del objetivo
+            yO = random(height / 2);  // Puede aparecer en la parte superior
+            
+          
+             
+            puntos = 0; 
+            gameOver = false;
+            }
+
+        function draw() {
+         
+         
+            if (xS <= width + rS) {
+            // Día mientras el borde izquierdo del Sol no ha salido por la derecha
+                background(130, 206, 250); //azul
+            } else {
+            // Noche cuando el Sol ya salió completamente por la derecha
+                background(0); //negro
+            }
+            
+            //disparo
+            if (disparoActivo === true) {
+              yD = yD - vD;
+
+            if (yD < 0) {
+              disparoActivo = false;
+            }
+             }
+            // 3.2 Suelo (decoración)
+            noStroke();
+            fill(20, 120, 40);
+            rect(0, 0.8 * height, width, 0.2 * height);
+
+           dibujarSol();
+            
+           dibujarLuna();
+         
+               if (gameOver) {
+                background(0);
+                dibujarGameOver();
+               noLoop();   // congela el juego
+           return;    // sale de draw()
+  }
+         
+            dibujarStickman();
+            
+            dibujarObjetivo();
+            
+            moverObjetivo();
+            
+            dibujarDisparo();
+            
+            dibujarPuntos();
+            
+           dibujarCalendario();
+        
+           actualizarCalendario();
+         
+           dibujarObstaculo();
+         
+           
+         
+           
+          
+        
+            // 3.4 Movimiento constante
+            xS = xS + vS;
+            xL = xL + vL;
+        
+            
+            if (xS > width + rS) {
+            dibujarLuna();
+              }
+            
+                //movimiento stickman
+                if (keyIsDown(LEFT_ARROW)) {
+                xP = xP - vP;
+                } else if (keyIsDown(RIGHT_ARROW)) {
+                xP = xP + vP;
+                }
+
+                
+                //no se sale del lienzo
+                if (xP < 0) {
+                xP = 0;
+                }
+                if (xP > width) {
+                xP = width;
+                }
+             
+               vY += g;
+               yP += vY;
+              if (yP > groundY) {
+                yP = groundY;
+                vY = 0;
+                }
+                hipY = yP - legL;
+                shoulderY = hipY - bodyL;
+               headY = shoulderY - rHead;
+               
+              //obstáculo
+              // mover obstáculo
+               xB += vB;
+         if (xB > width + wB || xB < -wB) {
+         if (random(1) < 0.5) {
+           xB = -wB;
+           vB = random(3, 6);
+       } else {
+          xB = width + wB;
+           vB = random(-6, -3);
+           }
+           }
+            // perder al chocar con el obstaculo
+           if (xP > xB && xP < xB + wB && yP > yB && yP < yB + hB) {
+            gameOver = true;
+            }
+            
+             //Muestra de variables
+            textSize(14);
+            stroke(255, 0, 0);
+            fill(255);
+            text(xS, 10, 10);
+            text(xL, 10, 28);
+             
+            // 6) Mover disparo
+            if (disparoActivo) {
+            yD -= 5;  // Movimiento ascendente del disparo
+            if (yD < 0) disparoActivo = false;  // El disparo desaparece al salir de la pantalla
+            }
+                
+        if (disparoActivo) {
+          // Comprobamos si el centro del disparo está dentro del rectángulo del objetivo
+            }
+           if (disparoActivo === true && xD > xO && xD < xO + wO &&yD > yO &&yD < yO + hO) {
+          puntos = puntos + 1;
+         disparoActivo = false;
+
+         // reaparece el objetivo
+        vO = random(1, 3);
+
+        if (xO < width / 2) {
+       xO = width;
+        } else {
+          xO = -wO;
+         }
+        }
+        }
+            
+            function keyPressed() {
+           if (keyCode === UP_ARROW) {
+            // Solo saltamos si estamos en el suelo
+           if (yP === groundY) {
+            vY = jumpV;
+            }
+          }
+            if (key === ' ' && disparoActivo === false) {
+            xD = xP;
+             yD = headY;
+             disparoActivo = true;
+             }
+           
+           if (key == ' ' && saltando == false) {
+           vyP = -12;
+         saltando = true;
+    }
+        }
+        function dibujarStickman() {
+         //Stickman
+            stroke(255,0,0);
+            strokeWeight(0.06 * S);
+            noFill();
+            // Cabeza
+            circle(xP, headY, 2 * rHead);
+            // Tronco
+            line(xP, shoulderY, xP, hipY);
+            // Brazos (una línea horizontal + dos líneas hacia abajo)
+            line(xP - 0.25*S, shoulderY, xP + 0.25*S, shoulderY);
+            line(xP - 0.25*S, shoulderY, xP - 0.25*S, shoulderY + armL);
+            line(xP + 0.25*S, shoulderY, xP + 0.25*S, shoulderY + armL);
+            // Piernas
+            line(xP, hipY, xP - 0.18*S, yP);
+            line(xP, hipY, xP + 0.18*S, yP);
+          }
+            function dibujarCalendario(){
+                
+            noStroke();//sin trazo
+
+            if (xS <= width + rS) { 
+            fill(0);    } 
+            else { 
+            fill(255); } 
+            textSize(20);
+            text("Fecha: (" + dia + ") (" + mes + ") (" + año + ")", 10, 20);
+            }
+            function actualizarCalendario() {
+             if (xS > 2 * width + rS) {
+                xS = -rS;
+                xL = -width - rL;
+
+                dia = dia + 1;
+                }
+                if (dia > 30) {
+                    dia = 1;
+                    mes = mes + 1;
+                }
+
+                if (mes > 12) {
+                    mes = 1;
+                    año = año + 1;
+                }
+            }
+        function dibujarSol() {
+            
+            
+            noStroke()
+            fill(255, 210, 0);
+            circle(xS, yS, dS);
+        }
+        function dibujarLuna() {
+            
+            noStroke(); 
+            fill(200);
+            circle(xL, yL, dL)
+            
+        }
+        function dibujarObjetivo() {
+          
+            fill(0, 255, 0);  // Color verde para el objetivo
+            noStroke();
+            rect(xO, yO, wO, hO);  // Dibuja el objetivo como un rectángulo
+        }
+        function moverObjetivo() {
+         
+            xO += vO;  // Mueve el objetivo
+            if (xO > width || xO < -wO) {  // Si el objetivo sale del canvas
+            vO = random(1, 3);  // Nueva velocidad aleatoria
+            if (xO > width) {
+            xO = -wO;  // Reaparece por el lado izquierdo
+           } else {
+            xO = width;  // Reaparece por el lado derecho
+          }
+        }
+            
+        }
+          function dibujarDisparo() {
+           fill(255, 0, 0);
+           noStroke();
+           ellipse(xD, yD, tD, tD);
+          }
+        function dibujarPuntos() {
+        fill(255);  // Texto blanco
+        textSize(32);
+        textAlign(RIGHT);
+        text("Puntos: " + puntos, width - 20, 40);  // Mostrar los puntos en la esquina superior derecha
+        }
+         function dibujarGameOver() {
+         fill(255);
+         textAlign(CENTER);
+         textSize(40);
+         text("GAME OVER", width/2, height/2);
+          textSize(20);
+           text("Puntos: " + puntos, width/2, height/2 + 40);
+          }
+         function dibujarObstaculo() {
+         fill(120);
+           rect(xB, yB, wB, hB);
+         }
+        </script>
+    </body>
+</html>
