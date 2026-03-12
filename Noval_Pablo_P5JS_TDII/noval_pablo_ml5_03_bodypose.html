@@ -160,5 +160,103 @@
       poses = results;
     }
   </script>
+  <a href="https://educastur-my.sharepoint.com/:f:/g/personal/pablons77_educastur_es/IgB1MNAWRSbYRIa-9n4o3x4bARJDUNvOQtSaKya1ApfGvX4?e=magLJS"> Link Photos
+  </a>
+  <p> 1. Fallo por mala iluminación
+
+Qué ocurre (síntoma):
+Los puntos del cuerpo (keypoints) aparecen en posiciones incorrectas o desaparecen temporalmente.
+
+En qué situación aparece:
+Cuando la habitación tiene poca luz o cuando la persona está en contraluz (por ejemplo frente a una ventana).
+
+Por qué puede pasar (hipótesis técnica):
+El modelo de visión artificial necesita contraste suficiente para identificar las partes del cuerpo. Con mala iluminación la cámara genera una imagen con ruido y el modelo pierde precisión.
+
+Cómo lo he comprobado:
+Probé la detección con la luz apagada y los puntos del esqueleto aparecían inestables o desaparecían. Al encender la luz, la detección mejoró claramente.
+
+2. Fallo por movimiento rápido
+
+Qué ocurre (síntoma):
+Los puntos del esqueleto “saltan” de un lugar a otro o aparecen líneas deformadas.
+
+En qué situación aparece:
+Cuando se mueven los brazos o las piernas muy rápido frente a la cámara.
+
+Por qué puede pasar (hipótesis técnica):
+El modelo analiza cada frame del vídeo. Si el movimiento es muy rápido, la posición del cuerpo cambia demasiado entre frames y el modelo no puede seguir correctamente las articulaciones.
+
+Cómo lo he comprobado:
+Moviendo los brazos lentamente el esqueleto se dibuja correctamente, pero al agitarlos rápidamente los puntos aparecen desordenados.
+
+3. Fallo por distancia incorrecta a la cámara
+
+Qué ocurre (síntoma):
+El sistema detecta solo algunas partes del cuerpo o deja de detectar la postura.
+
+En qué situación aparece:
+Cuando la persona está demasiado cerca o demasiado lejos de la cámara.
+
+Por qué puede pasar (hipótesis técnica):
+El modelo BodyPose está entrenado para reconocer cuerpos dentro de cierto tamaño en la imagen. Si el cuerpo ocupa demasiado poco o demasiado espacio, el modelo pierde referencias.
+
+Cómo lo he comprobado:
+Al alejarme mucho de la cámara desaparecen algunos puntos. Al acercarme demasiado tampoco detecta correctamente las piernas.
+
+4. Fallo cuando partes del cuerpo salen del encuadre
+
+Qué ocurre (síntoma):
+Algunos puntos desaparecen o aparecen en posiciones incorrectas.
+
+En qué situación aparece:
+Cuando una parte del cuerpo (por ejemplo brazos o piernas) queda fuera del campo de la cámara.
+
+Por qué puede pasar (hipótesis técnica):
+El modelo intenta estimar la posición de todas las articulaciones, pero si no puede ver una parte del cuerpo, puede intentar “adivinar” su posición o simplemente no detectarla.
+
+Cómo lo he comprobado:
+Cuando levanté un brazo fuera de la cámara, el sistema colocó el punto del codo en un lugar incorrecto o lo eliminó.
+
+5. Fallo por oclusión de partes del cuerpo
+
+Qué ocurre (síntoma):
+Los puntos se mueven a posiciones incorrectas o desaparecen.
+
+En qué situación aparece:
+Cuando una parte del cuerpo está tapada por un objeto o por otra parte del cuerpo (por ejemplo manos en bolsillos o brazos cruzados).
+
+Por qué puede pasar (hipótesis técnica):
+El modelo necesita ver las articulaciones para detectarlas. Si están ocultas, el sistema no tiene suficiente información para identificarlas correctamente.
+
+Cómo lo he comprobado:
+Al cruzar los brazos delante del cuerpo, el modelo confundía la posición de los codos y muñecas.
+
+6. Fallo con fondo complejo o con otras personas
+:
+El sistema detecta puntos en lugares donde no hay una persona o mezcla partes del cuerpo.
+
+En qué situación aparece:
+Cuando hay otras personas en el fondo o imágenes de personas (por ejemplo en posters o pantallas).
+
+Por qué puede pasar (hipótesis técnica):
+El modelo intenta detectar cuerpos humanos en toda la imagen, por lo que puede confundir objetos o imágenes con una persona real.
+
+Cómo lo he comprobado:
+Probé con otra persona pasando detrás de la cámara y el sistema detectó dos esqueletos o cambió entre uno y otro.
+
+7. Latencia o retraso en móviles lentos
+
+Qué ocurre (síntoma):
+El vídeo se mueve fluido pero los puntos del esqueleto aparecen con retraso.
+
+En qué situación aparece:
+En móviles con menor potencia o cuando el navegador está usando muchos recursos.
+
+Por qué puede pasar (hipótesis técnica):
+El modelo de detección de postura usa redes neuronales que requieren bastante cálculo. En dispositivos lentos el procesamiento tarda más y se reduce el número de frames por segundo.
+
+Cómo lo he comprobado:
+Probando en un móvil antiguo, el esqueleto se actualizaba más lentamente que en un ordenador.</p>
 </body>
 </html>
